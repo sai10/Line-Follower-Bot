@@ -1,104 +1,63 @@
-#define IR1 3
-#define IR2 4
-#define IR3 5
-#define IR4 6
-#define IR5 7
-//#define IR6 A0
-#define RMF 10
-#define RMB 9
-#define LMF 11
-#define LMB 12
+/**             A     SIMPLE     TEMPLATE       **/
+/**   
 
+ITS A BASIC CODE FOR LINE FOLLOWER. CODE SOLELY DEPENDS ON THE NUMBER OF IR SENSORS AND MOTORS YOU ARE USING AND MAINLY 
+YOUR BUSINESS LOGIC IS SOLELY BASED ON THE TYPE OF TRACK YOUR BOT GOING TO RUN. FOR BETTER RESULTS ITS ADVICED TO USE 
+PWM CONCEPT AS analogRead() IN PLACE OF digitalRead()
+      
+**/
 
+// 2 IR sensors
+#define LS 2      // left IR sensor
+#define RS 3      // right IR sensor
 
-void setup() {
-  // put your setup code here, to run once:
-  pinMode(IR1, INPUT);
-  pinMode(IR2, INPUT);
-  pinMode(IR3, INPUT);
-  pinMode(IR4, INPUT);
-  pinMode(IR5, INPUT);
-  pinMode(LMF, OUTPUT);
-  pinMode(LMB, OUTPUT);
-  pinMode(RMF, OUTPUT);
-  pinMode(RMB, OUTPUT);
-  Serial.begin(9600);
+// 2 DC center shaft motors
+#define LMF 4       // left motor Forward
+#define LMB 5       // left motor Backward
+#define RMF 6       // right motor Forward
+#define RMB 7       // right motor Backward
+
+void setup()
+{
+  pinMode(LS, INPUT);
+  pinMode(RS, INPUT);
+  pinMode(LM1, OUTPUT);
+  pinMode(LM2, OUTPUT);
+  pinMode(RM1, OUTPUT);
+  pinMode(RM2, OUTPUT);
 }
 
-
-void loop() {
-  // put your main code here, to run repeatedly:
-/*  Serial.println(digitalRead(IR1));
-  Serial.println(digitalRead(IR2));
-  Serial.println(digitalRead(IR3));
-  Serial.println(digitalRead(IR4));
-  Serial.println(digitalRead(IR5));
-  Serial.println();
-  Serial.println();
-  Serial.println();*/
- // delay(3000);
-
-// Serial.println(digitalRead(IR6));
-  if((digitalRead(IR1)==0)&&(digitalRead(IR2)==0&&digitalRead(IR3)==1&&digitalRead(IR4)==0)&&(digitalRead(IR5)==0))
+void loop()
+{
+  if(digitalRead(LS) && digitalRead(RS))     // Move Forward
   {
-      //go straight
-      digitalWrite(LMF, HIGH);
-      digitalWrite(LMB, LOW);
-      digitalWrite(RMF, HIGH);
-      digitalWrite(RMB, LOW);
-    }
-    
-    else if((digitalRead(IR1)==1)&&(digitalRead(IR2)==1&&digitalRead(IR3)==0&&digitalRead(IR4)==0)&&(digitalRead(IR5)==1) || (digitalRead(IR1)==1)&&(digitalRead(IR2)==0&&digitalRead(IR3)==1&&digitalRead(IR4)==0)&&(digitalRead(IR5)==0) )
+    digitalWrite(LM1, HIGH);
+    digitalWrite(LM2, LOW);
+    digitalWrite(RM1, HIGH);
+    digitalWrite(RM2, LOW);
+  }
+  
+  if(!(digitalRead(LS)) && digitalRead(RS))     // Turn right
   {
-    digitalWrite(LMF, HIGH);
-      digitalWrite(LMB, LOW);
-      digitalWrite(RMF, LOW);
-      digitalWrite(RMB, LOW);
-
-     
-      
-      digitalWrite(LMF, HIGH);
-      digitalWrite(LMB, LOW);
-      digitalWrite(RMF, HIGH);
-      digitalWrite(RMB, LOW);
-    }
-    
-     else if((digitalRead(IR2)==0&&digitalRead(IR3)==1&&digitalRead(IR4)==1)||(digitalRead(IR2)==1&&digitalRead(IR3)==1&&digitalRead(IR4)==1))
+    digitalWrite(LM1, LOW);
+    digitalWrite(LM2, LOW);
+    digitalWrite(RM1, HIGH);
+    digitalWrite(RM2, LOW);
+  }
+  
+  if(digitalRead(LS) && !(digitalRead(RS)))     // turn left
   {
-      
-      digitalWrite(LMF, LOW);
-      digitalWrite(LMB, LOW);
-      digitalWrite(RMF, HIGH);
-      digitalWrite(RMB, LOW);
-    }
-    
-  else if((digitalRead(IR2)==1&&digitalRead(IR3)==1&&digitalRead(IR4)==0))
+    digitalWrite(LM1, HIGH);
+    digitalWrite(LM2, LOW);
+    digitalWrite(RM1, LOW);
+    digitalWrite(RM2, LOW);
+  }
+  
+  if(!(digitalRead(LS)) && !(digitalRead(RS)))     // stop
   {
-      //go straight
-      digitalWrite(LMF, HIGH);
-      digitalWrite(LMB, LOW);
-      digitalWrite(RMF, HIGH);
-      digitalWrite(RMB, LOW);
-    }
-    else if((digitalRead(IR2)==0&&digitalRead(IR3)==0&&digitalRead(IR4)==1))
-    {
-      //left turn
-       digitalWrite(LMF, LOW);digitalWrite(LMB, LOW);
-      digitalWrite(RMF, HIGH);digitalWrite(RMB, LOW);
-    }
-    
-    else if((digitalRead(IR2)==1&&digitalRead(IR3)==0&&digitalRead(IR4)==0) || (digitalRead(IR1)==0&&digitalRead(IR2)==0&&digitalRead(IR3)==0&&digitalRead(IR4)==0)&&digitalRead(IR5)==0)
-    {
-      //right turn
-       digitalWrite(LMF, HIGH);digitalWrite(LMB, LOW);
-      digitalWrite(RMF, LOW);digitalWrite(RMB, HIGH);
-    }
-    else
-    {
-       digitalWrite(LMF, LOW);
-      digitalWrite(LMB, LOW);
-      digitalWrite(RMF, LOW);
-      digitalWrite(RMB, LOW);
-
-    }
- }
+    digitalWrite(LM1, LOW);
+    digitalWrite(LM2, LOW);
+    digitalWrite(RM1, LOW);
+    digitalWrite(RM2, LOW);
+  }
+}
